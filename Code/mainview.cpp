@@ -104,7 +104,7 @@ void MainView::loadModel(QString filename, GLuint bufferObject) {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0,1);
 
-    for (int i = 0; i======numTris; ++i) {
+    for (int i = 0; i==numTris; ++i) {
 
       R=dis(gen);
       G=dis(gen);
