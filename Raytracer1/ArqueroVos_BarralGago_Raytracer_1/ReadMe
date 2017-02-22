@@ -1,0 +1,35 @@
+--------------------------------------------------------MODIFICATIONS---------------------------------------------------------------------------
+
+-sphere.cpp: 	filled the method: 		Hit Sphere::intersect(const Ray &ray) Calculated t and N with the general ecuation of the 							sphere and the intersection of a ray in a point.
+
+-scene.cpp: 	added next methods: 		Color phongModel(Object *obj, Hit min_hit, const Ray &ray) Calculates phong illumination.
+    						Color normalBuffer(Hit min_hit) Calculates normal buffer.
+    						Color zBuffer(double t) Calculates zBuffer.
+
+    						Color diffuse(Material *material, Triple N, Point hit) Calculates id.
+    						Color specular(Material *material, Triple N, Triple V, Point hit) Calculates is.
+
+	    	modificated next methods:   	Color Scene::trace(const Ray &ray) Chooses which method will be executed.
+						void Scene::render(Image &img) Do a second loop if it is zbuffer method.
+
+
+	    	added some variables to store max and min distance, render mode and a vector to store the distance for each pixel.
+
+
+-raytracer.cpp	modificated next methods: 	Object* Raytracer::parseObject(const YAML::Node& node) Chooses the kind of figure it is been 							read.
+						bool Raytracer::readScene(const std::string& inputFilename) Chooses kind of render mode 						(default=phong).
+
+-plane.cpp: 	contains the same methods that sphere.cpp has. In this .cpp file it is calculated the intersection between a ray and a plane.
+-triangle.cpp: 	contains the same methods that sphere.cpp has. In this .cpp file it is calculated the intersection between a ray and a triangle.
+
+
+--------------------------------------------------------INSTRUCTIONS----------------------------------------------------------------------------
+
+Some indications to fill the new figures in a YAML file:
+	
+	-For a plane:		position: [x,y,z] A point in a plane.
+  				normal: [x,y,z] The normal in the plane.
+
+	-For a triangle: 	vertice1: [x,y,z] One vertice of a triangle.
+  				vertice2: [x,y,z] One vertice of a triangle.
+  				vertice3: [x,y,z] One vertice of a triangle.
