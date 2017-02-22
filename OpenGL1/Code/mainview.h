@@ -73,6 +73,10 @@ private:
     /* Add your private members below */
     void loadModel(QString filename, GLuint bufferObject);
 
+    QMatrix4x4 model;
+    QMatrix4x4 view;
+    QMatrix4x4 projection;
+
     // Shader programs, GLint for uniforms/buffer objects, other variables
     QOpenGLShaderProgram *mainShaderProg;
 

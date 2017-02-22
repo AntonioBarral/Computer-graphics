@@ -31,6 +31,7 @@ MainView::~MainView() {
     glDeleteBuffers(1,&BOcoordinates);
     glDeleteBuffers(1,&BOcolors);
     glDeleteVertexArrays(1,&VAO);
+
     // Free the main shader
     delete mainShaderProg;
 
@@ -67,24 +68,33 @@ void MainView::createShaderPrograms() {
 void MainView::createBuffers() {
     // TODO: implement buffer creation
 
+    //Bind the VAO to the OpenGL statemachine
     glGenVertexArrays(1,&VAO);
     glBindVertexArray(VAO);
 
+    //Generate two buffers for both the coordinates and color pointers
     glGenBuffers(1,&BOcoordinates);
     glGenBuffers(1,&BOcolors);
 
+    //Bind the coordinates BO. The state machine should have now the VAO for the cube, and the BO for the coordinates bound
     glBindBuffer(GL_ARRAY_BUFFER,BOcoordinates);
 
+    //Enable the coordinates attribute location from our shader
     glEnableVertexAttribArray(0);
 
+    //Assign the location to our coordinate BO
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,0);
 
+    //Bind the colors BO. The state machine should have now the VAO for the cube, and the BO for the colors bound
     glBindBuffer(GL_ARRAY_BUFFER,BOcolors);
 
+    //Enable the colors attribute location from our shader
     glEnableVertexAttribArray(1);
 
+    //Assign the location to our colors BO
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,0);
 
+    //Unbind the VAO
     glBindVertexArray(0);
 
 }
@@ -98,12 +108,16 @@ void MainView::loadModel(QString filename, GLuint bufferObject) {
 
     // TODO: implement loading of model into Buffer Objects
 
+
+    //Create dynamic array of vectors to store the vertices of the model.
     vertices = cubeModel->getVertices();
 
+    //Random generator. Each vector coefficient represents an R, G or B  floating point value between 0 and 1.
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0,1);
 
+    //The vertices are  grouped per 3  to create  a  triangle
     for (int i = 0; i==numTris; ++i) {
 
       R=dis(gen);
@@ -116,9 +130,11 @@ void MainView::loadModel(QString filename, GLuint bufferObject) {
       colors.append(color);
     }
 
+    //Bind the coordinates BO
     glBindBuffer(GL_ARRAY_BUFFER,BOcoordinates);
     glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*3,vertices.data(),GL_STATIC_DRAW);
 
+    //Bind the colors BO
     glBindBuffer(GL_ARRAY_BUFFER,BOcolors);
     glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*3,colors.data(),GL_STATIC_DRAW);
 
@@ -165,7 +181,7 @@ void MainView::initializeGL() {
     glEnable(GL_DEPTH_TEST);
 
     // Enable backface culling
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 
     // Default is GL_LESS
     glDepthFunc(GL_LEQUAL);
@@ -215,6 +231,13 @@ void MainView::paintGL() {
     mainShaderProg->bind();
 
     // TODO: implement your drawing functions
+
+    //Bind the VAO after the shader is bound
+    glGenVertexArrays(1,&VAO);
+    glBindVertexArray(VAO);
+
+    //Call drawing function
+    glDrawArrays(GL_TRIANGLES,0,3);
 
     mainShaderProg->release();
 }
