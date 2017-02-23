@@ -133,11 +133,11 @@ void MainView::loadModel(QString filename, GLuint bufferObject) {
 
     //Bind the coordinates BO
     glBindBuffer(GL_ARRAY_BUFFER,BOcoordinates);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*3,vertices.data(),GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*3*vertices.size(),vertices.data(),GL_STATIC_DRAW);
 
     //Bind the colors BO
     glBindBuffer(GL_ARRAY_BUFFER,BOcolors);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*3,colors.data(),GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*3*colors.size(),colors.data(),GL_STATIC_DRAW);
 
 }
 
@@ -233,11 +233,10 @@ void MainView::paintGL() {
     // TODO: implement your drawing functions
 
     //Bind the VAO after the shader is bound
-    glGenVertexArrays(1,&VAO);
     glBindVertexArray(VAO);
 
     //Call drawing function
-    glDrawArrays(GL_TRIANGLES,0,vertices.size());
+    glDrawArrays(GL_TRIANGLES,0,numTris*3);
 
     mainShaderProg->release();
 }
