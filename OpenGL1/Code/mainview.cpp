@@ -111,6 +111,7 @@ void MainView::loadModel(QString filename, GLuint bufferObject) {
 
     //Create dynamic array of vectors to store the vertices of the model.
     vertices = cubeModel->getVertices();
+    numVertices=vertices.size();
 
     //Random generator. Each vector coefficient represents an R, G or B  floating point value between 0 and 1.
     std::random_device rd;
@@ -118,7 +119,7 @@ void MainView::loadModel(QString filename, GLuint bufferObject) {
     std::uniform_real_distribution<> dis(0,1);
 
     //The vertices are  grouped per 3  to create  a  triangle
-    for (int i = 0; i==numTris; ++i) {
+    for (unsigned int i = 0; i<numTris; i++) {
 
       R=dis(gen);
       G=dis(gen);
@@ -137,7 +138,6 @@ void MainView::loadModel(QString filename, GLuint bufferObject) {
     //Bind the colors BO
     glBindBuffer(GL_ARRAY_BUFFER,BOcolors);
     glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*3,colors.data(),GL_STATIC_DRAW);
-
 
 }
 
@@ -237,7 +237,7 @@ void MainView::paintGL() {
     glBindVertexArray(VAO);
 
     //Call drawing function
-    glDrawArrays(GL_TRIANGLES,0,3);
+    glDrawArrays(GL_TRIANGLES,0,vertices.size());
 
     mainShaderProg->release();
 }
