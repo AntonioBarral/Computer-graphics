@@ -30,9 +30,13 @@ public:
     float R;
     float G;
     float B;
+    float scaleValue = 1;
+    float startX;// capture x starting position
+    float startY;// capture y starting position
 
     unsigned int numVertices;
 
+    QVector3D rotationXYZ;
 
     /* End of public members */
 
@@ -79,6 +83,10 @@ private:
 
     // Shader programs, GLint for uniforms/buffer objects, other variables
     QOpenGLShaderProgram *mainShaderProg;
+
+    GLint uniformModel;
+    GLint uniformView;
+    GLint uniformProjection;
 
     QTimer timer; // timer used for animation
 

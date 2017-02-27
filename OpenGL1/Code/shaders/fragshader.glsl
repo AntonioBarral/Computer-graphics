@@ -7,9 +7,17 @@
 // These must have the same type and name!
 
 // in vec3 vertPos; Using the output from the vertex shader example
+in vec3 vertColor;
+in vec3 coordinates;
+in vec3 normalValue;
 
 // Specify the Uniforms of the vertex shaders
 // uniform vec3 lightPosition; for example
+uniform vec3 materialColor;
+uniform vec4 intensity;
+uniform vec3 lightPosition;
+uniform vec3 position;
+uniform vec3 camara;
 
 // Specify the output of the fragment shader
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
@@ -18,5 +26,6 @@ out vec4 fColor;
 void main()
 {
     // Plain White
-    fColor = vec4(1.0, 1.0, 1.0, 1.0);
+   // fColor = vec4(1.0, 1.0, 1.0, 1.0);
+    fColor = vec4(vertColor, 1.0);//for cube
 }

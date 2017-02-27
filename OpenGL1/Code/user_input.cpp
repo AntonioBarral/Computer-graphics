@@ -5,6 +5,11 @@
 void MainView::updateRotation(int x, int y, int z)
 {
     qDebug() << "updateRotation(" << x << "," << y << "," << z << ");";
+    rotationXYZ.setX(x);
+    rotationXYZ.setY(y);
+    rotationXYZ.setZ(z);
+
+    update();
 }
 
 void MainView::updateModel(QString name)
@@ -27,7 +32,13 @@ void MainView::updateScale(float scale)
 {
     qDebug() << "updateScale(" << scale << ")";
     // TODO: update model scale
-
+    scaleValue = scale;
+    if(scaleValue<0.1){
+        scaleValue = 0.1;
+    }
+    else if(scaleValue>1.3){
+        scaleValue = 1.3;
+    }
     update();
 }
 
@@ -74,7 +85,14 @@ void MainView::mouseDoubleClickEvent(QMouseEvent *ev)
 void MainView::mouseMoveEvent(QMouseEvent *ev)
 {
     qDebug() << "x" << ev->x() << "y" << ev->y();
-
+    float X = 0;
+    float Y = 0;
+    X = startX - ev->x();
+    startX =  ev->x();
+    Y = startY - ev->y();
+    startY = ev->y();
+    rotationXYZ.setX(rotationXYZ.x() - Y);
+    rotationXYZ.setY(rotationXYZ.y() - X);
     update();
 }
 
@@ -82,7 +100,8 @@ void MainView::mouseMoveEvent(QMouseEvent *ev)
 void MainView::mousePressEvent(QMouseEvent *ev)
 {
     qDebug() << "Mouse button pressed:" << ev->button();
-
+    startX = ev->x();
+    startY = ev->y();
     update();
     // Do not remove the line below, clicking must focus on this widget!
     this->setFocus();

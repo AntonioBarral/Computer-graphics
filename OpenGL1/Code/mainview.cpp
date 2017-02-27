@@ -53,10 +53,13 @@ void MainView::createShaderPrograms() {
     mainShaderProg->link();
 
     /* Add your other shaders below */
-
+    uniformModel= glGetUniformLocation(mainShaderProg->programId(), "model");
+    uniformView= glGetUniformLocation(mainShaderProg->programId(), "view");
+    uniformProjection= glGetUniformLocation(mainShaderProg->programId(), "projection");
     /* End of custom shaders */
 
     // Store the locations (pointers in gpu memory) of uniforms in Glint's
+
 
 }
 
@@ -145,13 +148,13 @@ void MainView::updateBuffers() {
     // Change the data inside buffers (if you want)
     // make sure to change GL_STATIC_DRAW to GL_DYNAMIC_DRAW
     // in the call to glBufferData for better performance
-
+     qDebug()<<"Update Buffer";
 }
 
 
 void MainView::updateUniforms() {
     // TODO: update the uniforms in the shaders using the glUniform<datatype> functions
-
+    qDebug()<<"Update uniform";
 }
 
 /**
@@ -212,8 +215,8 @@ void MainView::initializeGL() {
 void MainView::resizeGL(int newWidth, int newHeight) {
 
     // TODO: Update projection to fit the new aspect ratio
-    Q_UNUSED(newWidth)
-    Q_UNUSED(newHeight)
+    projection.setToIdentity();
+    projection.perspective(60,(float)newWidth/(float)newHeight,2,6);
 }
 
 /**
@@ -241,11 +244,22 @@ void MainView::paintGL() {
     //Set the matrices as identity matrices
     model.setToIdentity();
     view.setToIdentity();
-    projection.setToIdentity();
 
-    view.translate(0,0,-4);
-    projection.perspective(60,1,2,6);
 
+    //The cube is rendered about 4 units in front of the camera
+    view.translate(0.0,0.0,-4.0);
+
+
+    model.scale(scaleValue);
+
+    model.rotate(rotationXYZ.x(),1,0,0);
+    model.rotate(rotationXYZ.y(),0,1,0);
+    model.rotate(rotationXYZ.z(),0,0,1);
+
+    //Upload values to the GPU
+    glUniformMatrix4fv(uniformModel,1,GL_FALSE,model.data());
+    glUniformMatrix4fv(uniformView,1,GL_FALSE,view.data());
+    glUniformMatrix4fv(uniformProjection,1,GL_FALSE,projection.data());
 
 
     mainShaderProg->release();
