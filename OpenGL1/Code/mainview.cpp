@@ -244,6 +244,7 @@ void MainView::paintGL() {
     projection.setToIdentity();
 
 
+    model=model*model.translate(4,4)*model.rotate(60);
 
 
 
