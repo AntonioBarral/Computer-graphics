@@ -31,11 +31,7 @@ public:
     float G;
     float B;
 
-    int numVertices;
-
-    GLuint VAO;
-    GLuint BOcoordinates;
-    GLuint BOcolors;
+    unsigned int numVertices;
 
 
     /* End of public members */
@@ -72,6 +68,10 @@ private:
 
     /* Add your private members below */
     void loadModel(QString filename, GLuint bufferObject);
+
+    GLuint VAO;
+    GLuint BOcoordinates;
+    GLuint BOcolors;
 
     QMatrix4x4 model;
     QMatrix4x4 view;
