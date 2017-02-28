@@ -122,6 +122,20 @@ void MainView::wheelEvent(QWheelEvent *ev)
 {
     // Implement something
     qDebug() << "Mouse wheel:" << ev->delta();
+    if(ev->delta()<0){
+        sc -= 0.2;
+        if(sc<0.2){
+            sc = 0.2;
+        }
+        update();
+    }
+    else if(ev->delta()>0){
+        sc += 0.2;
+        if(sc>1.2){
+            sc = 1.2;
+        }
+        update();
+    }
 
-    update();
 }
+
