@@ -24,7 +24,6 @@ uniform mat3 normal;
 // out vec3 vertPos; for example
 out vec3 vertColor;
 out vec3 coordinates;
-out vec3 normalValue;
 
 void main()
 {
@@ -34,5 +33,5 @@ void main()
    gl_Position =  projection * view * model * vec4(vertCoordinates_in, 1.0);
    vertColor = vertColor_in;
    coordinates = vertCoordinates_in;
-   normalValue = normal * vertNormal_in ;
+
 }

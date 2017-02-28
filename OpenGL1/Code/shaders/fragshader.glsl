@@ -8,16 +8,9 @@
 
 // in vec3 vertPos; Using the output from the vertex shader example
 in vec3 vertColor;
-in vec3 coordinates;
-in vec3 normalValue;
 
 // Specify the Uniforms of the vertex shaders
 // uniform vec3 lightPosition; for example
-uniform vec3 materialColor;
-uniform vec4 intensity;
-uniform vec3 position;
-uniform vec3 camara;
-uniform vec3 lightPosition;
 
 
 // Specify the output of the fragment shader

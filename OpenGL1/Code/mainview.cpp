@@ -251,7 +251,7 @@ void MainView::paintGL() {
     view.translate(0.0,0.0,-4.0);
 
     //Make it scale
-    model.scale(scaleValue);
+    model.scale(sc);
 
     //Make it rotate
     model.rotate(rotation.x(),1,0,0);

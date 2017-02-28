@@ -30,7 +30,7 @@ public:
     float R;
     float G;
     float B;
-    float scaleValue = 1;
+    float sc = 1; //The scale value
     float startX; //The start position of x
     float startY; //The start position of y
 

@@ -33,12 +33,13 @@ void MainView::updateScale(float scale)
     qDebug() << "updateScale(" << scale << ")";
     //Update model scale
 
-    scaleValue = scale;
-    if(scaleValue<0.1){ //if it is too small
-        scaleValue = 0.1;
+    sc = scale;
+    if(sc<0.2){ //if it is too small
+        sc = 0.2;
     }
-    else if(scaleValue>1.3){ //if it is too big to fit in the screen
-        scaleValue = 1.3;
+
+    if(sc>1.2){ //if it is too big to fit in the screen
+        sc = 1.2;
     }
     update();
 }
