@@ -5,9 +5,9 @@
 void MainView::updateRotation(int x, int y, int z)
 {
     qDebug() << "updateRotation(" << x << "," << y << "," << z << ");";
-    rotationXYZ.setX(x);
-    rotationXYZ.setY(y);
-    rotationXYZ.setZ(z);
+    rotation.setX(x);
+    rotation.setY(y);
+    rotation.setZ(z);
 
     update();
 }
@@ -31,12 +31,13 @@ void MainView::updateShader(QString name)
 void MainView::updateScale(float scale)
 {
     qDebug() << "updateScale(" << scale << ")";
-    // TODO: update model scale
+    //Update model scale
+
     scaleValue = scale;
-    if(scaleValue<0.1){
+    if(scaleValue<0.1){ //if it is too small
         scaleValue = 0.1;
     }
-    else if(scaleValue>1.3){
+    else if(scaleValue>1.3){ //if it is too big to fit in the screen
         scaleValue = 1.3;
     }
     update();
@@ -91,8 +92,8 @@ void MainView::mouseMoveEvent(QMouseEvent *ev)
     startX =  ev->x();
     Y = startY - ev->y();
     startY = ev->y();
-    rotationXYZ.setX(rotationXYZ.x() - Y);
-    rotationXYZ.setY(rotationXYZ.y() - X);
+    rotation.setX(rotation.x() - X);
+    rotation.setY(rotation.y() - Y);
     update();
 }
 

@@ -31,12 +31,12 @@ public:
     float G;
     float B;
     float scaleValue = 1;
-    float startX;// capture x starting position
-    float startY;// capture y starting position
+    float startX; //The start position of x
+    float startY; //The start position of y
 
     unsigned int numVertices;
 
-    QVector3D rotationXYZ;
+    QVector3D rotation;
 
     /* End of public members */
 

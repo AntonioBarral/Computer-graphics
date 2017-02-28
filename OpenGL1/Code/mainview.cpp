@@ -53,12 +53,13 @@ void MainView::createShaderPrograms() {
     mainShaderProg->link();
 
     /* Add your other shaders below */
+    // Store the locations (pointers in gpu memory) of uniforms in Glint's
     uniformModel= glGetUniformLocation(mainShaderProg->programId(), "model");
     uniformView= glGetUniformLocation(mainShaderProg->programId(), "view");
     uniformProjection= glGetUniformLocation(mainShaderProg->programId(), "projection");
     /* End of custom shaders */
 
-    // Store the locations (pointers in gpu memory) of uniforms in Glint's
+
 
 
 }
@@ -69,7 +70,7 @@ void MainView::createShaderPrograms() {
  * Creates necessary buffers for your application
  */
 void MainView::createBuffers() {
-    // TODO: implement buffer creation
+    // Implement buffer creation
 
     //Bind the VAO to the OpenGL statemachine
     glGenVertexArrays(1,&VAO);
@@ -109,7 +110,7 @@ void MainView::loadModel(QString filename, GLuint bufferObject) {
 
     Q_UNUSED(bufferObject);
 
-    // TODO: implement loading of model into Buffer Objects
+    // Implement loading of model into Buffer Objects
 
 
     //Create dynamic array of vectors to store the vertices of the model.
@@ -184,7 +185,7 @@ void MainView::initializeGL() {
     glEnable(GL_DEPTH_TEST);
 
     // Enable backface culling
-    //glEnable(GL_CULL_FACE);
+   // glEnable(GL_CULL_FACE);
 
     // Default is GL_LESS
     glDepthFunc(GL_LEQUAL);
@@ -192,7 +193,7 @@ void MainView::initializeGL() {
     // Set the color of the screen to be black on clear (new frame)
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
-    /* TODO: call your initialization functions here */
+    /*Call your initialization functions here */
 
     createShaderPrograms();
 
@@ -214,9 +215,9 @@ void MainView::initializeGL() {
  */
 void MainView::resizeGL(int newWidth, int newHeight) {
 
-    // TODO: Update projection to fit the new aspect ratio
+    //Update projection to fit the new aspect ratio
     projection.setToIdentity();
-    projection.perspective(60,(float)newWidth/(float)newHeight,2,6);
+    projection.perspective(60,(float)newWidth/(float)newHeight,1,5);
 }
 
 /**
@@ -233,7 +234,7 @@ void MainView::paintGL() {
 
     mainShaderProg->bind();
 
-    // TODO: implement your drawing functions
+    // Implement your drawing functions
 
     //Bind the VAO after the shader is bound
     glBindVertexArray(VAO);
@@ -241,7 +242,7 @@ void MainView::paintGL() {
     //Call drawing function
     glDrawArrays(GL_TRIANGLES,0,numTris*3);
 
-    //Set the matrices as identity matrices
+    //Set each of the matrices to the unit matrix
     model.setToIdentity();
     view.setToIdentity();
 
@@ -249,12 +250,13 @@ void MainView::paintGL() {
     //The cube is rendered about 4 units in front of the camera
     view.translate(0.0,0.0,-4.0);
 
-
+    //Make it scale
     model.scale(scaleValue);
 
-    model.rotate(rotationXYZ.x(),1,0,0);
-    model.rotate(rotationXYZ.y(),0,1,0);
-    model.rotate(rotationXYZ.z(),0,0,1);
+    //Make it rotate
+    model.rotate(rotation.x(),1,0,0);
+    model.rotate(rotation.y(),0,1,0);
+    model.rotate(rotation.z(),0,0,1);
 
     //Upload values to the GPU
     glUniformMatrix4fv(uniformModel,1,GL_FALSE,model.data());
@@ -267,4 +269,4 @@ void MainView::paintGL() {
 
 // Add your function implementations below
 
-// TODO: add your code
+

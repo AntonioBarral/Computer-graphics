@@ -15,9 +15,10 @@ in vec3 normalValue;
 // uniform vec3 lightPosition; for example
 uniform vec3 materialColor;
 uniform vec4 intensity;
-uniform vec3 lightPosition;
 uniform vec3 position;
 uniform vec3 camara;
+uniform vec3 lightPosition;
+
 
 // Specify the output of the fragment shader
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
@@ -25,7 +26,6 @@ out vec4 fColor;
 
 void main()
 {
-    // Plain White
-   // fColor = vec4(1.0, 1.0, 1.0, 1.0);
-    fColor = vec4(vertColor, 1.0);//for cube
+    //For colored cube
+    fColor = vec4(vertColor, 1.0);
 }
