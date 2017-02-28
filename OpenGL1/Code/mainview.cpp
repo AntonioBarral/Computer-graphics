@@ -238,16 +238,6 @@ void MainView::paintGL() {
     //Call drawing function
     glDrawArrays(GL_TRIANGLES,0,numTris*3);
 
-    //Set the matrices as identity matrices
-    model.setToIdentity();
-    view.setToIdentity();
-    projection.setToIdentity();
-
-    view.translate(0,0,-4);
-    projection.perspective(60,1,2,6);
-
-
-
     mainShaderProg->release();
 }
 

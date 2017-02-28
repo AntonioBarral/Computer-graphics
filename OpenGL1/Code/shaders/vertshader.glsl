@@ -11,11 +11,6 @@ layout (location = 2) in vec3 vertNormal_in;
 
 // Specify the Uniforms of the vertex shader
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-
-uniform mat3 normalMatrix;
 // uniform mat4 modelTransform; for example
 
 // Specify the outputs of the vertex shader
