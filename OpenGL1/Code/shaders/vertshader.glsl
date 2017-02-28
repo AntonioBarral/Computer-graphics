@@ -22,16 +22,15 @@ uniform mat3 normal;
 // These will be the input for the fragment shader
 
 // out vec3 vertPos; for example
-out vec3 vertColor;
+out vec3 color;
 out vec3 coordinates;
 
 void main()
 {
     // gl_Position is the output (a vec4) of the vertex shader
-    // Currently without any transformation
 
    gl_Position =  projection * view * model * vec4(vertCoordinates_in, 1.0);
-   vertColor = vertColor_in;
+   color = vertColor_in;
    coordinates = vertCoordinates_in;
 
 }

@@ -7,7 +7,7 @@
 // These must have the same type and name!
 
 // in vec3 vertPos; Using the output from the vertex shader example
-in vec3 vertColor;
+in vec3 color;
 
 // Specify the Uniforms of the vertex shaders
 // uniform vec3 lightPosition; for example
@@ -20,5 +20,5 @@ out vec4 fColor;
 void main()
 {
     //For colored cube
-    fColor = vec4(vertColor, 1.0);
+    fColor = vec4(color, 1.0);
 }

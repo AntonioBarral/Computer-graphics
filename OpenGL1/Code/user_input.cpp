@@ -89,12 +89,12 @@ void MainView::mouseMoveEvent(QMouseEvent *ev)
     qDebug() << "x" << ev->x() << "y" << ev->y();
     float X = 0;
     float Y = 0;
-    X = startX - ev->x();
-    startX =  ev->x();
-    Y = startY - ev->y();
-    startY = ev->y();
-    rotation.setX(rotation.x() - X);
-    rotation.setY(rotation.y() - Y);
+    X = startingXMouse - ev->x();
+    startingXMouse =  ev->x();
+    Y = startingYMouse - ev->y();
+    startingYMouse = ev->y();
+    rotation.setX(rotation.x() - Y);
+    rotation.setY(rotation.y() - X);
     update();
 }
 
@@ -102,8 +102,8 @@ void MainView::mouseMoveEvent(QMouseEvent *ev)
 void MainView::mousePressEvent(QMouseEvent *ev)
 {
     qDebug() << "Mouse button pressed:" << ev->button();
-    startX = ev->x();
-    startY = ev->y();
+    startingXMouse = ev->x();
+    startingYMouse = ev->y();
     update();
     // Do not remove the line below, clicking must focus on this widget!
     this->setFocus();

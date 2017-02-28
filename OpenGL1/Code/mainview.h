@@ -31,8 +31,8 @@ public:
     float G;
     float B;
     float sc = 1; //The scale value
-    float startX; //The start position of x
-    float startY; //The start position of y
+    float startingXMouse; //The start position of x
+    float startingYMouse; //The start position of y
 
     unsigned int numVertices;
 
