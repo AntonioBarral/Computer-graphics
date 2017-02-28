@@ -188,7 +188,7 @@ void MainView::initializeGL() {
 void MainView::resizeGL(int newWidth, int newHeight) {
     //Update projection to fit the new aspect ratio
     projection.setToIdentity();
-    projection.perspective(30.0,(float)newWidth/(float)newHeight,400.0,1200.0);
+    projection.perspective(30.0,(float)newWidth/(float)newHeight,400.0,1800.0);
 }
 
 /**
