@@ -35,6 +35,7 @@ private:
     double minDistance;
     bool considerShadows;
     int recDepth;
+    int ssFactor;
 public:
     Color trace(const Ray &ray);
 
@@ -52,6 +53,7 @@ public:
     void setRenderMode(std::string rm);
     void setShadows(bool b);
     void setRecDepth(int r);
+    void setSSFactor(int ss);
 
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }

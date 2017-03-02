@@ -95,17 +95,23 @@ Color Scene::phongModel(Object *obj, Hit min_hit, const Ray &ray)
     for(unsigned int i=0; i<lights.size(); i++) {
 
 	L=(lights[i]->position-hit).normalized();
-        R=(2*(N.dot(L))*N-L).normalized();
-	
 
 	if(considerShadows && areShadows(hit, N, L)) {
 	     color+=ia; 
         }else{
+	     R=(2*(N.dot(L))*N-L).normalized();
  	     id+=material->color*material->kd*lights[i]->color*max(0.0, N.dot(L));
-             is+=material->ks*(lights[i]->color*pow(max(0.0, R.dot(V)),material->n))/*trace(reflecRay)*/;
+             is+=material->ks*(lights[i]->color*pow(max(0.0, R.dot(V)),material->n));
+
+	     if(recDepth>0 && material->ks!=0.0) {
+		Ray recRay(hit+N, R);
+		setRecDepth(recDepth-1);
+		is=trace(recRay)*is;			         
+	     }
 	     color+=ia+id+is;  
         }
     }
+
     
     return color;
 }
@@ -159,6 +165,9 @@ void Scene::render(Image &img)
             Point pixel(x+0.5, h-1-y+0.5, 0);
             Ray ray(eye, (pixel-eye).normalized());
             Color col = trace(ray);
+		cout << recDepth << endl;
+            setRecDepth(2);
+		cout << recDepth << endl;
             col.clamp();
             img(x,y) = col;
         }
@@ -236,4 +245,9 @@ void Scene::setShadows(bool b)
 void Scene::setRecDepth(int r)
 {
    recDepth=r;
+}
+
+void Scene::setSSFactor(int ss) 
+{
+   ssFactor=ss;
 }

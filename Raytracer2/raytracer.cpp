@@ -155,9 +155,22 @@ bool Raytracer::readScene(const std::string& inputFilename)
 		scene->setRecDepth(recDepth);
 	    }
 
-            // Read scene configuration options
-            scene->setEye(parseTriple(doc["Eye"]));
+	    //Read the super-sampling values
+	    if(doc.FindValue("SuperSampling")) {
+		int ssFactor;
+		doc["factor"] >> ssFactor;
+		scene->setSSFactor(ssFactor);
+	    }
 
+            // Read scene configuration options
+
+	    if(doc.FindValue("SuperSampling")) {
+		Triple eye;
+		Point center;
+		Vector up;
+	    }else{
+                scene->setEye(parseTriple(doc["Eye"]));
+	    }
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];
             if (sceneObjects.GetType() != YAML::CT_SEQUENCE) {
