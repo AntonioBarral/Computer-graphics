@@ -22,6 +22,8 @@ Hit Plane::intersect(const Ray &ray)
 
     if(t<0) return Hit::NO_HIT();
 
+    
+
 
 //The normal is provided in the data of the figure
     return Hit(t,n);
