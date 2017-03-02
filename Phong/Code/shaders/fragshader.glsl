@@ -25,22 +25,20 @@ out vec4 fColor;
 
 void main()
 {
-    // Calculate phong shading
+    // Calculate phong shading values
     vec3 lightColor = vec3(1,1,1);
-    vec3 L = normalize(lightpos - pos);
     vec3 N = normalize(normalValue);
-
-    vec3 R = reflect(L, N);
+    vec3 L = normalize(lightpos - pos);
     vec3 V = normalize(camara - pos);
+    vec3 R = reflect(L, N);
 
     // Obtain specular, ambient and diffuse light
-    vec3 specular = pow(max(0.0,dot(R,V)),intensity.w) * lightColor * intensity.z;
     vec3 ambient = materialColor * intensity.x;
     vec3 diffuse = max(0.0,dot(N,L)) * materialColor * lightColor * intensity.y ;
-    diffuse += ambient;
-    diffuse += specular;
+    vec3 specular = pow(max(0.0,dot(R,V)),intensity.w) * lightColor * intensity.z;
+    vec3 phongIllumination= ambient+specular+diffuse;
 
     // For colored spheres
-    fColor = vec4(diffuse,1.0);
+    fColor = vec4(phongIllumination,1.0);
 
 }

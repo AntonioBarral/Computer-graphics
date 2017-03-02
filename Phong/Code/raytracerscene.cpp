@@ -12,7 +12,7 @@ void MainView::renderSphere(QVector3D pos, QVector3D color, QVector4D material, 
     // Make view matrix translate
     view.translate(-200,-200,-1000);
 
-    // Make model matrix rotate rotate around (200,200,200) in world space
+    // Make model matrix rotate around (200,200,200) in world space
     model.rotate(rotation.x(),200,0,0);
     model.rotate(rotation.y(),0,200,0);
     model.rotate(rotation.z(),0,0,200);
