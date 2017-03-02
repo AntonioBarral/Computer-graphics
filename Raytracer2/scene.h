@@ -34,17 +34,15 @@ private:
     double maxDistance;
     double minDistance;
     bool considerShadows;
+    int recDepth;
 public:
     Color trace(const Ray &ray);
 
     Color phongModel(Object *obj, Hit min_hit, const Ray &ray);
     Color normalBuffer(Hit min_hit);
     Color zBuffer(double t);
-
-    Color diffuse(Material *material, Triple N, Point hit);
-    Color specular(Material *material, Triple N, Triple V, Point hit);
     
-    Color shadowColor(Point hit, Vector N, Color noShadow, Color ia, Color id);
+    bool areShadows(Point hit, Vector N, Vector L);
 
     void render(Image &img);
     void addObject(Object *o);
@@ -53,7 +51,7 @@ public:
     void setEye(Triple e);
     void setRenderMode(std::string rm);
     void setShadows(bool b);
-   
+    void setRecDepth(int r);
 
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }

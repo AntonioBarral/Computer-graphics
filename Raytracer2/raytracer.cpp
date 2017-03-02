@@ -142,11 +142,19 @@ bool Raytracer::readScene(const std::string& inputFilename)
 	    //Read the shadows of the figure if it has
 	    if(doc.FindValue("Shadows"))  {
 		bool shadows;
-		doc["Shadows"] >>shadows;
+		doc["Shadows"] >> shadows;
 		scene->setShadows(shadows);
 	    }else{
 		scene->setShadows(false);
 	    }
+
+	    //Read the number of reflections per object
+	    if(doc.FindValue("MaxRecursionDepth")) {
+		int recDepth;
+		doc["MaxRecursionDepth"] >> recDepth;
+		scene->setRecDepth(recDepth);
+	    }
+
             // Read scene configuration options
             scene->setEye(parseTriple(doc["Eye"]));
 

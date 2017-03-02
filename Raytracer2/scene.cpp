@@ -66,8 +66,11 @@ Color Scene::phongModel(Object *obj, Hit min_hit, const Ray &ray)
     Point hit = ray.at(min_hit.t);                 //the hit point
     Vector N = min_hit.N;                          //the normal at hit point
     Vector V = -ray.D;                             //the view vector
-
-
+    Vector L;					   //the light vector
+    Vector R;					   //the reflection vector
+    Color id(0.0,0.0,0.0);			   //diffuse intensity
+    Color is(0.0,0.0,0.0);			   //specular intensity
+    Color color(0.0,0.0,0.0);			   //total color
     /****************************************************
     * This is where you should insert the color
     * calculation (Phong model).
@@ -87,14 +90,23 @@ Color Scene::phongModel(Object *obj, Hit min_hit, const Ray &ray)
     ****************************************************/
 
     Color ia=material->color*material->ka;
-    Color id=diffuse(material, N, hit);
-    Color is=specular(material, N, V, hit);
-    Color color=ia+ id+ is;
 
-    if(considerShadows) {
-	color= shadowColor(hit,N,color,ia, id);
+    //Calculation of id and is for each light
+    for(unsigned int i=0; i<lights.size(); i++) {
+
+	L=(lights[i]->position-hit).normalized();
+        R=(2*(N.dot(L))*N-L).normalized();
+	
+
+	if(considerShadows && areShadows(hit, N, L)) {
+	     color+=ia; 
+        }else{
+ 	     id+=material->color*material->kd*lights[i]->color*max(0.0, N.dot(L));
+             is+=material->ks*(lights[i]->color*pow(max(0.0, R.dot(V)),material->n))/*trace(reflecRay)*/;
+	     color+=ia+id+is;  
+        }
     }
-
+    
     return color;
 }
 
@@ -170,79 +182,25 @@ void Scene::render(Image &img)
     }
 }
 
-/*
-* Calculation of the diffuse parameter (id)
-*/
-Color Scene::diffuse(Material *material, Triple N, Point hit)
-{
-   Color summation;
-   Vector L;
-
-   for(unsigned int i=0;i<lights.size();i++){
-	
-	L=(lights[i]->position-hit).normalized();
-	summation += (lights[i]->color*max(0.0, N.dot(L)));
-   }
-   
-   Color diffuseIll=material->color*material->kd*summation;
-
-   return diffuseIll;
-  
-}
-
-
-/*
-* Calculation of the specular parameter (is)
-*/
-
-Color Scene::specular(Material *material, Triple N, Triple V, Point hit)
-{
-  Triple R;
-  Color summation;
-  Vector L;
-  Ray reflecRay(hit+N,R); 
-
-  for(unsigned int i=0; i<lights.size(); i++) {
-	
-	L=(lights[i]->position-hit).normalized();
-	R=(2*(N.dot(L))*N-L).normalized();
-        summation += (lights[i]->color*pow(max(0.0, R.dot(V)),material->n));
-  }
-
-  Color specularIll=material->ks*summation/*trace(reflecRay)*/;
-
-   return specularIll;
-
-}
 
 /*
 *Calculate if the L of the object hits another object
 */
 
-Color Scene::shadowColor(Point hit, Vector N, Color defaultColor, Color ia, Color id) 
+bool Scene::areShadows(Point hit, Vector N, Vector L) 
 {
-   Vector L;
    Hit no_hit(std::numeric_limits<double>::infinity(),Vector());
-   Color newColor;
-   bool isShadow=false;
   
-   for(unsigned int i=0; i<lights.size(); i++) {
-	L=(lights[i]->position-hit).normalized();
-	Ray nray(hit+N,L);       
+   Ray nray(hit+N,L);       
 
-       for(unsigned int j=0; j<objects.size(); j++) {
-	   Hit nHit=objects[j]->intersect(nray);
-           if(nHit.t<no_hit.t) {
-	       newColor+=lights[i]->color*defaultColor;
-	       isShadow=true;
-	       break;
-	   }
+    for(unsigned int j=0; j<objects.size(); j++) {
+       Hit nHit=objects[j]->intersect(nray);
+       if(nHit.t<no_hit.t) {
+           return true;
        }
-   }
+    }
 
-   if(isShadow) return newColor;
-
-   return defaultColor;
+   return false;
 }
 
 void Scene::addObject(Object *o)
@@ -273,4 +231,9 @@ void Scene::setRenderMode(std::string rm)
 void Scene::setShadows(bool b)
 {
    considerShadows=b;
+}
+
+void Scene::setRecDepth(int r)
+{
+   recDepth=r;
 }
