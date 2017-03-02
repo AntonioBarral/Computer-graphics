@@ -165,9 +165,7 @@ void Scene::render(Image &img)
             Point pixel(x+0.5, h-1-y+0.5, 0);
             Ray ray(eye, (pixel-eye).normalized());
             Color col = trace(ray);
-		cout << recDepth << endl;
             setRecDepth(2);
-		cout << recDepth << endl;
             col.clamp();
             img(x,y) = col;
         }
