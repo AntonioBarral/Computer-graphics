@@ -35,6 +35,7 @@ private:
     double minDistance;
     bool considerShadows;
     int recDepth;
+    int auxRecDepth;
     int ssFactor;
 public:
     Color trace(const Ray &ray);
