@@ -109,6 +109,13 @@ Light* Raytracer::parseLight(const YAML::Node& node)
     return new Light(position,color);
 }
 
+void Raytracer::parseSize(const YAML::Node& node)
+{
+   node[0] >> size[0];
+   node[1] >> size[1];
+
+}
+
 /*
 * Read a scene from file
 */
@@ -160,14 +167,25 @@ bool Raytracer::readScene(const std::string& inputFilename)
 		int ssFactor;
 		doc["factor"] >> ssFactor;
 		scene->setSSFactor(ssFactor);
+	    }else{
+		scene->setSSFactor(1);
 	    }
 
             // Read scene configuration options
 
-	    if(doc.FindValue("SuperSampling")) {
+	    if(doc.FindValue("Camera")) {
 		Triple eye;
 		Point center;
 		Vector up;
+
+		doc["eye"] >> eye;
+		doc["center"] >> center;
+		doc["up"] >> up;
+		
+		parseSize(doc["viewSize"]);
+		Camera *camera= new Camera(eye,center,up, size);
+		scene->setCamera(*camera);
+
 	    }else{
                 scene->setEye(parseTriple(doc["Eye"]));
 	    }

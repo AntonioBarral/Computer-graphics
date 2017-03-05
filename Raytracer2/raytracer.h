@@ -21,6 +21,7 @@
 #include "light.h"
 #include "scene.h"
 #include "yaml/yaml.h"
+#include "camera.h"
 
 class Raytracer {
 private:
@@ -30,6 +31,9 @@ private:
     Material* parseMaterial(const YAML::Node& node);
     Object* parseObject(const YAML::Node& node);
     Light* parseLight(const YAML::Node& node);
+    void parseSize(const YAML::Node& node);
+
+    int size[2];
 
 public:
     Raytracer() { }

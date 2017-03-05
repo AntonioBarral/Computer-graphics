@@ -22,6 +22,7 @@
 #include "light.h"
 #include "object.h"
 #include "image.h"
+#include "camera.h"
 
 class Scene
 {
@@ -35,8 +36,8 @@ private:
     double minDistance;
     bool considerShadows;
     int recDepth;
-    int auxRecDepth;
     int ssFactor;
+    Camera *camera;
 public:
     Color trace(const Ray &ray);
 
@@ -55,6 +56,7 @@ public:
     void setShadows(bool b);
     void setRecDepth(int r);
     void setSSFactor(int ss);
+    void setCamera(Camera &c);
 
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }

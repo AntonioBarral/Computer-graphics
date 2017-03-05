@@ -159,15 +159,41 @@ void Scene::render(Image &img)
     int h = img.height();
     maxDistance=0;
     minDistance=0;
+    int pos=0;
+    Color colors [ssFactor*ssFactor];
+    Color color;
+    int auxRec=recDepth;
 
     for (int y = 0; y < h; y++) {
         for (int x = 0; x < w; x++) {
             Point pixel(x+0.5, h-1-y+0.5, 0);
-            Ray ray(eye, (pixel-eye).normalized());
-            Color col = trace(ray);
-	    recDepth=2;
-            col.clamp();
-            img(x,y) = col;
+           
+		//SUPERSAMPLING
+	    if(ssFactor!=1) {
+		for (int i = 0; i < ssFactor; i++) {  
+       		    for (int j = 0; j < ssFactor; j++) {
+			Point subpixel(j+0.5, y-1-i+0.5, 0);
+			Ray ray(eye, (subpixel-eye).normalized());
+			Color colorSubpixel = trace(ray);
+			colorSubpixel.clamp();
+			colors[pos]=colorSubpixel;
+			pos++;
+		    }
+		}
+		//hacer media de los colores y asignarselo a la variable col
+   		for(unsigned int i =0; i<sizeof(colors); i++) {
+		    cout << sizeof(colors) << endl;
+		    color+=colors[i];
+		}
+		color/=ssFactor;
+		//FIN SUPERSAMPLING
+	    }else{
+		Ray ray(eye, (pixel-eye).normalized());
+		color = trace(ray);
+	    }
+	    recDepth=auxRec;
+	    color.clamp(); 
+	    img(x,y) = color;
         }
     }
 
@@ -243,10 +269,13 @@ void Scene::setShadows(bool b)
 void Scene::setRecDepth(int r)
 {
    recDepth=r;
-   auxRecDepth=r;
 }
 
 void Scene::setSSFactor(int ss) 
 {
    ssFactor=ss;
+}
+void Scene::setCamera(Camera &c) 
+{
+   *camera=c;    
 }
