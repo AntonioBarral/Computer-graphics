@@ -109,6 +109,13 @@ Light* Raytracer::parseLight(const YAML::Node& node)
     return new Light(position,color);
 }
 
+void Raytracer::parseSize(const YAML::Node& node)
+{
+   node[0] >> width;
+   node[1] >> height;
+
+}
+
 /*
 * Read a scene from file
 */
@@ -160,16 +167,29 @@ bool Raytracer::readScene(const std::string& inputFilename)
 		int ssFactor;
 		doc["factor"] >> ssFactor;
 		scene->setSSFactor(ssFactor);
+	    }else{
+		scene->setSSFactor(1);
 	    }
 
             // Read scene configuration options
 
-	    if(doc.FindValue("SuperSampling")) {
+	    if(doc.FindValue("Camera")) {
 		Triple eye;
 		Point center;
 		Vector up;
+
+		doc["eye"] >> eye;
+		doc["center"] >> center;
+		doc["up"] >> up;
+		
+		parseSize(doc["viewSize"]);
+		Camera *camera= new Camera(eye,center,up, width, height);
+		scene->setCamera(*camera);
+
 	    }else{
                 scene->setEye(parseTriple(doc["Eye"]));
+		width=400;		//default value
+                height=400;		//default value
 	    }
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];
@@ -211,7 +231,7 @@ bool Raytracer::readScene(const std::string& inputFilename)
 
 void Raytracer::renderToFile(const std::string& outputFilename)
 {
-    Image img(400,400);
+    Image img(width,height);
     cout << "Tracing..." << endl;
     scene->render(img);
     cout << "Writing image to " << outputFilename << "..." << endl;

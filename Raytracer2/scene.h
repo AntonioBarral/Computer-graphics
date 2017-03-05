@@ -22,6 +22,7 @@
 #include "light.h"
 #include "object.h"
 #include "image.h"
+#include "camera.h"
 
 class Scene
 {
@@ -34,16 +35,19 @@ private:
     double maxDistance;
     double minDistance;
     bool considerShadows;
+    bool extCamera;
     int recDepth;
     int ssFactor;
+    Camera *camera;
 public:
     Color trace(const Ray &ray);
 
     Color phongModel(Object *obj, Hit min_hit, const Ray &ray);
     Color normalBuffer(Hit min_hit);
-    Color zBuffer(double t);
-    
+    Color zBuffer(double t);    
+
     bool areShadows(Point hit, Vector N, Vector L);
+    Point extendedCamera(Camera &camera, Point pixel, int width, int height);
 
     void render(Image &img);
     void addObject(Object *o);
@@ -54,6 +58,7 @@ public:
     void setShadows(bool b);
     void setRecDepth(int r);
     void setSSFactor(int ss);
+    void setCamera(Camera &c);
 
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }

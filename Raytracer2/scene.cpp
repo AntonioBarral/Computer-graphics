@@ -67,7 +67,8 @@ Color Scene::phongModel(Object *obj, Hit min_hit, const Ray &ray)
     Vector N = min_hit.N;                          //the normal at hit point
     Vector V = -ray.D;                             //the view vector
     Vector L;					   //the light vector
-    Vector R;					   //the reflection vector
+    Vector R;					   //the R vector
+    Color ia(0.0,0.0,0.0);			   //ambient intensity   
     Color id(0.0,0.0,0.0);			   //diffuse intensity
     Color is(0.0,0.0,0.0);			   //specular intensity
     Color color(0.0,0.0,0.0);			   //total color
@@ -89,7 +90,7 @@ Color Scene::phongModel(Object *obj, Hit min_hit, const Ray &ray)
     *        pow(a,b)           a to the power of b
     ****************************************************/
 
-    Color ia=material->color*material->ka;
+    ia=material->color*material->ka;
 
     //Calculation of id and is for each light
     for(unsigned int i=0; i<lights.size(); i++) {
@@ -101,14 +102,15 @@ Color Scene::phongModel(Object *obj, Hit min_hit, const Ray &ray)
         }else{
 	     R=(2*(N.dot(L))*N-L).normalized();
  	     id+=material->color*material->kd*lights[i]->color*max(0.0, N.dot(L));
-             is+=material->ks*(lights[i]->color*pow(max(0.0, R.dot(V)),material->n));
-
-	     if(recDepth>0 && material->ks!=0.0) {
-		Ray recRay(hit+N, R);
-		setRecDepth(recDepth-1);
-		is=trace(recRay)*is;			         
-	     }
+	     is+=material->ks*(lights[i]->color*pow(max(0.0, R.dot(V)),material->n));
 	     color+=ia+id+is;  
+
+	     if(recDepth>0) {
+		Color RV=(2*(N.dot(V))*N-V).normalized();
+		Ray recRay(hit+N, RV);
+		setRecDepth(recDepth-1); 
+		color+=material->ks*trace(recRay);       
+	    }
         }
     }
 
@@ -157,17 +159,47 @@ void Scene::render(Image &img)
     int h = img.height();
     maxDistance=0;
     minDistance=0;
-
-    
+    int pos=0;
+    Color colors [ssFactor*ssFactor];
+    Color color;
+    int auxRec=recDepth;
 
     for (int y = 0; y < h; y++) {
         for (int x = 0; x < w; x++) {
             Point pixel(x+0.5, h-1-y+0.5, 0);
-            Ray ray(eye, (pixel-eye).normalized());
-            Color col = trace(ray);
-            setRecDepth(2);
-            col.clamp();
-            img(x,y) = col;
+           
+	    if(extCamera) {
+		setEye(camera->eye);
+		pixel=extendedCamera(*camera, pixel, w, h);
+	    }
+
+		//SUPERSAMPLING
+	    if(ssFactor!=1) {
+		for (int i = pixel.y; i < ssFactor; i++) {  
+       		    for (int j = pixel.x; j < ssFactor; j++) {
+			Point subpixel(j+0.5, y-1-i+0.5, 0);
+			Ray ray(eye, (subpixel-eye).normalized());
+			Color colorSubpixel = trace(ray);
+			colorSubpixel.clamp();
+			colors[pos]=colorSubpixel;
+			pos++;
+		    }
+		}
+		//hacer media de los colores y asignarselo a la variable col
+   		for(unsigned int i =0; i<sizeof(colors); i++) {
+		    cout << sizeof(colors) << endl;
+		    color+=colors[i];
+		}
+		color/=ssFactor;
+		//FIN SUPERSAMPLING
+
+	    }else{
+		Ray ray(eye, (pixel-eye).normalized());
+		color = trace(ray);
+	    }
+	    recDepth=auxRec;
+	    color.clamp(); 
+	    img(x,y) = color;
         }
     }
 
@@ -210,6 +242,26 @@ bool Scene::areShadows(Point hit, Vector N, Vector L)
    return false;
 }
 
+Point Scene::extendedCamera(Camera &camera, Point pixel, int width, int height)
+{
+    Point finalPixel;
+
+    double sx=pixel.x;
+    double sy=pixel.y;
+
+    Vector G=eye-camera.center;
+    Vector A=G.cross(camera.up);
+    Vector B=A.cross(G);
+    Vector M= eye+G;
+
+    Vector H=(A.normalized()*height)/2;
+    Vector V=(B.normalized()*width)/2;
+
+    finalPixel=M+(2+sx-1)*H+(1-2*sy)*V;
+
+    return finalPixel;
+}
+
 void Scene::addObject(Object *o)
 {
     objects.push_back(o);
@@ -249,3 +301,10 @@ void Scene::setSSFactor(int ss)
 {
    ssFactor=ss;
 }
+
+void Scene::setCamera(Camera &c) 
+{
+   *camera=c;
+   extCamera=true;    
+}
+
