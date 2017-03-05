@@ -33,7 +33,8 @@ private:
     Light* parseLight(const YAML::Node& node);
     void parseSize(const YAML::Node& node);
 
-    int size[2];
+    int width;
+    int height;
 
 public:
     Raytracer() { }

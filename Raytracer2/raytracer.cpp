@@ -111,8 +111,8 @@ Light* Raytracer::parseLight(const YAML::Node& node)
 
 void Raytracer::parseSize(const YAML::Node& node)
 {
-   node[0] >> size[0];
-   node[1] >> size[1];
+   node[0] >> width;
+   node[1] >> height;
 
 }
 
@@ -183,11 +183,13 @@ bool Raytracer::readScene(const std::string& inputFilename)
 		doc["up"] >> up;
 		
 		parseSize(doc["viewSize"]);
-		Camera *camera= new Camera(eye,center,up, size);
+		Camera *camera= new Camera(eye,center,up, width, height);
 		scene->setCamera(*camera);
 
 	    }else{
                 scene->setEye(parseTriple(doc["Eye"]));
+		width=400;		//default value
+                height=400;		//default value
 	    }
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];
@@ -229,7 +231,7 @@ bool Raytracer::readScene(const std::string& inputFilename)
 
 void Raytracer::renderToFile(const std::string& outputFilename)
 {
-    Image img(400,400);
+    Image img(width,height);
     cout << "Tracing..." << endl;
     scene->render(img);
     cout << "Writing image to " << outputFilename << "..." << endl;

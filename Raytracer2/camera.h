@@ -8,21 +8,20 @@ class Camera
 
 public:
 
-    Camera(Triple e, Point c, Vector u, int s [2] ) 
-    {
-	eye=e;
-	center=c;
-	up=u;
-	width=s[0];
-        height=s[1];
-    }
-
-private:
     Triple eye;
     Point center;
     Vector up;
     int width;
     int height;
+
+    Camera(Triple e, Point c, Vector u, int w, int h ) 
+    {
+	eye=e;
+	center=c;
+	up=u;
+	width=w;
+        height=h;
+    }
 
 };
 

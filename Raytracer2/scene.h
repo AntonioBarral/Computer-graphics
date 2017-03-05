@@ -35,6 +35,7 @@ private:
     double maxDistance;
     double minDistance;
     bool considerShadows;
+    bool extCamera;
     int recDepth;
     int ssFactor;
     Camera *camera;
@@ -43,9 +44,10 @@ public:
 
     Color phongModel(Object *obj, Hit min_hit, const Ray &ray);
     Color normalBuffer(Hit min_hit);
-    Color zBuffer(double t);
-    
+    Color zBuffer(double t);    
+
     bool areShadows(Point hit, Vector N, Vector L);
+    Point extendedCamera(Camera &camera, Point pixel, int width, int height);
 
     void render(Image &img);
     void addObject(Object *o);

@@ -168,6 +168,11 @@ void Scene::render(Image &img)
         for (int x = 0; x < w; x++) {
             Point pixel(x+0.5, h-1-y+0.5, 0);
            
+	    if(extCamera) {
+		setEye(camera->eye);
+		pixel=extendedCamera(*camera, pixel, w, h);
+	    }
+
 		//SUPERSAMPLING
 	    if(ssFactor!=1) {
 		for (int i = 0; i < ssFactor; i++) {  
@@ -187,6 +192,7 @@ void Scene::render(Image &img)
 		}
 		color/=ssFactor;
 		//FIN SUPERSAMPLING
+
 	    }else{
 		Ray ray(eye, (pixel-eye).normalized());
 		color = trace(ray);
@@ -236,6 +242,26 @@ bool Scene::areShadows(Point hit, Vector N, Vector L)
    return false;
 }
 
+Point Scene::extendedCamera(Camera &camera, Point pixel, int width, int height)
+{
+    Point finalPixel;
+
+    double sx=pixel.x;
+    double sy=pixel.y;
+
+    Vector G=eye-camera.center;
+    Vector A=G.cross(camera.up);
+    Vector B=A.cross(G);
+    Vector M= eye+G;
+
+    Vector H=(A.normalized()*height)/2;
+    Vector V=(B.normalized()*width)/2;
+
+    finalPixel=M+(2+sx-1)*H+(1-2*sy)*V;
+
+    return finalPixel;
+}
+
 void Scene::addObject(Object *o)
 {
     objects.push_back(o);
@@ -275,7 +301,10 @@ void Scene::setSSFactor(int ss)
 {
    ssFactor=ss;
 }
+
 void Scene::setCamera(Camera &c) 
 {
-   *camera=c;    
+   *camera=c;
+   extCamera=true;    
 }
+
