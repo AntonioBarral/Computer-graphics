@@ -175,8 +175,13 @@ void Scene::render(Image &img)
 
 		//SUPERSAMPLING
 	    if(ssFactor!=1) {
+<<<<<<< HEAD
 		for (int i = pixel.y; i < ssFactor; i++) {  
        		    for (int j = pixel.x; j < ssFactor; j++) {
+=======
+		for (int i = 0; i < ssFactor; i++) {  
+       		    for (int j = 0; j < ssFactor; j++) {
+>>>>>>> c0ed94ab9a563c7f133c7247f92224d93bb109a0
 			Point subpixel(j+0.5, y-1-i+0.5, 0);
 			Ray ray(eye, (subpixel-eye).normalized());
 			Color colorSubpixel = trace(ray);
