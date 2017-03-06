@@ -116,6 +116,9 @@ void Raytracer::parseSize(const YAML::Node& node)
 
 }
 
+/*
+* Parse for supersampling
+*/
 int Raytracer::parseSS(const YAML::Node& node)
 {
    int ss;
@@ -184,19 +187,24 @@ bool Raytracer::readScene(const std::string& inputFilename)
 		Triple eye;
 		Point center;
 		Vector up;
-
+		
 		(*sample)["eye"] >> eye;
 		(*sample)["center"] >> center;
 		(*sample)["up"] >> up;
 		
 		parseSize((*sample)["viewSize"]);
+
 		Camera *camera= new Camera(eye,center,up, width, height);
-		scene->setCamera(*camera);
+
+		scene->setCamera(camera);
+		scene->setPixelSize(up.length());
+
 
 	    }else{
                 scene->setEye(parseTriple(doc["Eye"]));
 		width=400;		//default value
                 height=400;		//default value
+		scene->setPixelSize(1.0);
 	    }
             // Read and parse the scene objects
             const YAML::Node& sceneObjects = doc["Objects"];

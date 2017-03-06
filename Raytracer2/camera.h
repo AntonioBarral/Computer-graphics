@@ -8,7 +8,7 @@ class Camera
 
 public:
 
-    Triple eye;
+    Triple eye;  
     Point center;
     Vector up;
     int width;

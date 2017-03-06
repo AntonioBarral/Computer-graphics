@@ -15,7 +15,7 @@
 Eye: [200,200,1000]  
 
 SuperSampling:
-  factor: 2
+  factor: 4
 
 Lights:
 - position: [-200,600,1500]

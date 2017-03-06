@@ -38,13 +38,17 @@ private:
     bool extCamera;
     int recDepth;
     double ssFactor;
+    double pixelSize;
     Camera *camera;
+
+
 public:
     Color trace(const Ray &ray);
 
     Color phongModel(Object *obj, Hit min_hit, const Ray &ray);
     Color normalBuffer(Hit min_hit);
     Color zBuffer(double t);    
+    Color supersampling(int x, int y, int h, int auxRec);
 
     bool areShadows(Point hit, Vector N, Vector L);
     Point extendedCamera(Camera &camera, Point pixel, int width, int height);
@@ -58,7 +62,8 @@ public:
     void setShadows(bool b);
     void setRecDepth(int r);
     void setSSFactor(double ss);
-    void setCamera(Camera &c);
+    void setCamera(Camera *c);
+    void setPixelSize(double lenghtUp); 
 
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }
