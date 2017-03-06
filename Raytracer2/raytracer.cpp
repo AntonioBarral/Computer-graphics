@@ -116,6 +116,13 @@ void Raytracer::parseSize(const YAML::Node& node)
 
 }
 
+int Raytracer::parseSS(const YAML::Node& node)
+{
+   int ss;
+   node["position"] >> ss;
+   return ss;
+}
+
 /*
 * Read a scene from file
 */
@@ -163,26 +170,26 @@ bool Raytracer::readScene(const std::string& inputFilename)
 	    }
 
 	    //Read the super-sampling values
-	    if(doc.FindValue("SuperSampling")) {
-		int ssFactor;
-		doc["factor"] >> ssFactor;
-		scene->setSSFactor(ssFactor);
+	    if(const YAML::Node* sample = doc.FindValue("SuperSampling")) {
+		int factor;
+		(*sample)["factor"] >> factor;
+                scene->setSSFactor(factor);
 	    }else{
 		scene->setSSFactor(1);
 	    }
 
             // Read scene configuration options
 
-	    if(doc.FindValue("Camera")) {
+	    if(const YAML::Node* sample = doc.FindValue("Camera")) {
 		Triple eye;
 		Point center;
 		Vector up;
 
-		doc["eye"] >> eye;
-		doc["center"] >> center;
-		doc["up"] >> up;
+		(*sample)["eye"] >> eye;
+		(*sample)["center"] >> center;
+		(*sample)["up"] >> up;
 		
-		parseSize(doc["viewSize"]);
+		parseSize((*sample)["viewSize"]);
 		Camera *camera= new Camera(eye,center,up, width, height);
 		scene->setCamera(*camera);
 

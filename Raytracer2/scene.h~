@@ -37,7 +37,7 @@ private:
     bool considerShadows;
     bool extCamera;
     int recDepth;
-    double ssFactor;
+    int ssFactor;
     Camera *camera;
 public:
     Color trace(const Ray &ray);
@@ -57,7 +57,7 @@ public:
     void setRenderMode(std::string rm);
     void setShadows(bool b);
     void setRecDepth(int r);
-    void setSSFactor(double ss);
+    void setSSFactor(int ss);
     void setCamera(Camera &c);
 
     unsigned int getNumObjects() { return objects.size(); }

@@ -177,7 +177,6 @@ void Scene::render(Image &img)
 
 
 		//SUPERSAMPLING
-		pos=0;
 	    if(ssFactor!=1) {
 		for (double i = h-y; i > h-y-1; i=i-(1/ssFactor)) {  
 

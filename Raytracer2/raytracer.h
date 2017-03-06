@@ -32,6 +32,7 @@ private:
     Object* parseObject(const YAML::Node& node);
     Light* parseLight(const YAML::Node& node);
     void parseSize(const YAML::Node& node);
+    int parseSS(const YAML::Node& node);
 
     int width;
     int height;
