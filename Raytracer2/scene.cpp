@@ -159,14 +159,11 @@ void Scene::render(Image &img)
     int w = img.width();
     int h = img.height();
     maxDistance=0;
-    minDistance=0;
-    int pos=0;
-    std::vector<Color> colors((int)(ssFactor*ssFactor)); 
+    minDistance=0; 
     Color color;
     int auxRec=recDepth;
 
     for (int y = 0; y < h; y++) {
-
         for (int x = 0; x < w; x++) {
             Point pixel(x+0.5, h-1-y+0.5, 0);
            
@@ -177,7 +174,6 @@ void Scene::render(Image &img)
 
 
 		//SUPERSAMPLING
-		pos=0;
 	    if(ssFactor!=1) {
 		for (double i = h-y; i > h-y-1; i=i-(1/ssFactor)) {  
 
@@ -188,30 +184,25 @@ void Scene::render(Image &img)
 
 			Ray ray(eye, (subpixel-eye).normalized());
 
-			Color colorSubpixel = trace(ray);
-
-			colorSubpixel.clamp();
-			colors.push_back(colorSubpixel);
-
-			pos++;
+			color += trace(ray);
+			
+			recDepth=auxRec;
 
 		    }
 		}
-cout<<pos<<endl;
-		//hacer media de los colores y asignarselo a la variable col
-   		for(unsigned int i =0; i<colors.size(); i++) {
-		    color+=colors.at(i);
-		}
-
-		color/=ssFactor;
+		//hacer media de los colores
+		//color.clamp();
+		color/=ssFactor*ssFactor;
 		//FIN SUPERSAMPLING
 
 	    }else{
 		Ray ray(eye, (pixel-eye).normalized());
 		color = trace(ray);
+		recDepth=auxRec;
+		
 	    }
 	    recDepth=auxRec;
-	    color.clamp(); 
+	    color.clamp();
 	    img(x,y) = color;
         }
     }
@@ -263,12 +254,12 @@ Point Scene::extendedCamera(Camera &camera, Point pixel, int width, int height)
     double sy=pixel.y;
 
     Vector G=eye-camera.center;
-    Vector A=G.cross(camera.up);
-    Vector B=A.cross(G);
+    Vector A=G.cross(camera.up).normalized();
+    Vector B=A.cross(G).normalized();
     Vector M= eye+G;
 
-    Vector H=(A.normalized()*height)/2;
-    Vector V=(B.normalized()*width)/2;
+    Vector H=(A*height*camera.pixelSize)/2;
+    Vector V=(B*width*camera.pixelSize)/2;
 
     finalPixel=M+(2+sx-1)*H+(1-2*sy)*V;
 
@@ -315,9 +306,9 @@ void Scene::setSSFactor(double ss)
    ssFactor=ss;
 }
 
-void Scene::setCamera(Camera &c) 
+void Scene::setCamera(Camera *c) 
 {
-   *camera=c;
+   camera=c;
    extCamera=true;    
 }
 

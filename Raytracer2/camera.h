@@ -13,6 +13,7 @@ public:
     Vector up;
     int width;
     int height;
+    double pixelSize;
 
     Camera(Triple e, Point c, Vector u, int w, int h ) 
     {
@@ -23,6 +24,10 @@ public:
         height=h;
     }
 
+    void setPixelSize() 
+    { 
+        pixelSize = up.length(); 
+    }
 };
 
 #endif

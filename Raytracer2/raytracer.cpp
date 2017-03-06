@@ -184,14 +184,17 @@ bool Raytracer::readScene(const std::string& inputFilename)
 		Triple eye;
 		Point center;
 		Vector up;
-
+		
 		(*sample)["eye"] >> eye;
 		(*sample)["center"] >> center;
 		(*sample)["up"] >> up;
 		
 		parseSize((*sample)["viewSize"]);
+
 		Camera *camera= new Camera(eye,center,up, width, height);
-		scene->setCamera(*camera);
+
+		scene->setCamera(camera);
+
 
 	    }else{
                 scene->setEye(parseTriple(doc["Eye"]));

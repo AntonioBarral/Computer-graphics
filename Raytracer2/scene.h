@@ -58,7 +58,7 @@ public:
     void setShadows(bool b);
     void setRecDepth(int r);
     void setSSFactor(double ss);
-    void setCamera(Camera &c);
+    void setCamera(Camera *c);
 
     unsigned int getNumObjects() { return objects.size(); }
     unsigned int getNumLights() { return lights.size(); }
