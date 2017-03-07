@@ -12,7 +12,7 @@ public:
     virtual Hit intersect(const Ray &ray);
 
     const Point point;
-    const Vector n;
+    Vector n;
 };
 
 #endif /* end of include guard: PLANE_H_115209AE */

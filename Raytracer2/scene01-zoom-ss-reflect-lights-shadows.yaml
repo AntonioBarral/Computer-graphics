@@ -12,52 +12,44 @@
 #  The example scene description should largely speak for itself. By now
 #  it should be clear that the #-character can be used to insert comments.
 
-RenderMode: "normal"
+Camera:
+    eye: [200,200,1000]
+    center: [200,200,0]
+    up: [0,0.75,0]
+    viewSize: [800,400]
 
-Eye: [200,200,1000]  
+Shadows: true
+MaxRecursionDepth: 2
+SuperSampling:
+  factor: 4
 
 Lights:
 - position: [-200,600,1500]
-  color: [1.0,1.0,1.0]
+  color: [0.4,0.4,0.8]
+- position: [600,600,1500]
+  color: [0.8,0.8,0.4]
 
 Objects:
-- type: triangle
-  vertice1: [215,280,300]
-  vertice2: [150,190,200]
-  vertice3: [240,190,280]
-  material: # yellow
-    color: [1.0,0.8,0.0]
-    ka: 0.2
-    kd: 0.8
-    ks: 0.3
-    n: 1
-
-
-- type: triangle
-  vertice1: [150,190,200]
-  vertice2: [95,100,100]
-  vertice3: [175,100,180]
-  material: # yellow
-    color: [1.0,0.8,0.0]
-    ka: 0.2
-    kd: 0.8
-    ks: 0.3
-    n: 1
-
-
-- type: triangle
-  vertice1: [240,190,280]
-  vertice2: [175,100,180]
-  vertice3: [265,100,260]
-  material: # yellow
-    color: [1.0,0.8,0.0]
-    ka: 0.2
-    kd: 0.8
-    ks: 0.3
-    n: 1
-
 - type: sphere
-  position: [215,280,300]
+  position: [90,320,100]
+  radius: 50
+  material: # blue
+    color: [0.0,0.0,1.0]
+    ka: 0.2
+    kd: 0.7
+    ks: 0.5
+    n: 64
+- type: sphere
+  position: [210,270,300]
+  radius: 50
+  material: # green
+    color: [0.0,1.0,0.0]
+    ka: 0.2
+    kd: 0.3
+    ks: 0.5
+    n: 8
+- type: sphere
+  position: [290,170,150]
   radius: 50
   material: # red
     color: [1.0,0.0,0.0]
@@ -65,9 +57,17 @@ Objects:
     kd: 0.7
     ks: 0.8
     n: 32
-
 - type: sphere
-  position: [95,100,100]
+  position: [140,220,400]
+  radius: 50
+  material: # yellow
+    color: [1.0,0.8,0.0]
+    ka: 0.2
+    kd: 0.8
+    ks: 0
+    n: 1
+- type: sphere
+  position: [110,130,200]
   radius: 50
   material: # orange
     color: [1.0,0.5,0.0]
@@ -76,12 +76,11 @@ Objects:
     ks: 0.5
     n: 32
 - type: sphere
-  position: [265,100,260]
-  radius: 50
-  material: # blue
-    color: [0.0,0.0,1.0]
+  position: [200,200,-1000]
+  radius: 1000
+  material: # grey
+    color: [0.4,0.4,0.4]
     ka: 0.2
-    kd: 0.7
-    ks: 0.5
-    n: 64
-
+    kd: 0.8
+    ks: 0
+    n: 1

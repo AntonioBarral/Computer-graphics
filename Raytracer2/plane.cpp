@@ -12,6 +12,13 @@
 Hit Plane::intersect(const Ray &ray)
 {
 
+    Vector conflictN_rayD=n.cross(ray.D);
+
+    if(conflictN_rayD.x==0.0 && conflictN_rayD.y==0.0 && conflictN_rayD.z==0.0){
+	n=-n;
+    }
+
+
     double denumerator=ray.D.dot(n);
     double numerator=(point-ray.O).dot(n);
     if(denumerator<=0){

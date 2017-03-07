@@ -11,6 +11,13 @@
 Hit Triangle::intersect(const Ray &ray)
 {
     Vector N=(v2-v1).cross(v3-v1);
+
+    Vector conflictN_rayD=N.cross(ray.D);
+
+    if(conflictN_rayD.x==0.0 && conflictN_rayD.y==0.0 && conflictN_rayD.z==0.0){
+	N=-N;
+    }
+
     double D=N.dot(v1);
 
     double numerator=-(N.dot(ray.O))+D;
