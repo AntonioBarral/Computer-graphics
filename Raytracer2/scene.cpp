@@ -109,6 +109,7 @@ Color Scene::phongModel(Object *obj, Hit min_hit, const Ray &ray)
     
     //if the recursivity is activated and ks bigger than 0
     //recursively continuing rays in the direction of the reflection  vector
+
     if(recDepth>0 && material->ks>0) {
 	Color RV=(2*(N.dot(V))*N-V).normalized();
 	Ray recRay(hit+N, RV);
