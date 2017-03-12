@@ -27,7 +27,7 @@ public:
     /* Add your public members below */
     QVector<QVector3D> vertices;
     QVector3D rotation;
-    float sc;
+    float sc=1;
     float startingXMouse; //The start position of x
     float startingYMouse; //The start position of y
     /* End of public members */

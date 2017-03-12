@@ -13,9 +13,13 @@ void MainView::renderSphere(QVector3D pos, QVector3D color, QVector4D material, 
     view.translate(-200,-200,-1000);
 
     // Make model matrix rotate around (200,200,200) in world space
+   // model.translate(-200,-200,-200);
+    model.translate(200,200,200);
     model.rotate(rotation.x(),200,0,0);
     model.rotate(rotation.y(),0,200,0);
     model.rotate(rotation.z(),0,0,200);
+    model.translate(-200,-200,-200);
+
 
     // Make the model matrix translate in position "pos"
     model.translate(pos);
